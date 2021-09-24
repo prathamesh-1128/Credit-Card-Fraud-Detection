@@ -1,0 +1,155 @@
+import numpy as np
+import pandas as pd
+import sklearn
+import scipy
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import classification_report,accuracy_score
+from sklearn.ensemble import IsolationForest
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.svm import OneClassSVM
+from pylab import rcParams
+rcParams['figure.figsize'] = 14, 8
+RANDOM_SEED = 42
+LABELS = ["Normal", "Fraud"]
+import chart_studio.plotly as py
+import plotly.graph_objs as go
+import plotly
+import plotly.figure_factory as ff
+from plotly.offline import init_notebook_mode, iplot
+data = pd.read_csv('creditcard.csv',sep=',')
+print(data.columns)
+data1= data.sample(frac = 0.1,random_state=1)
+print("hello")
+data1.shape
+print(data.shape)
+print(data.describe)
+print(data.isnull().values.any())
+print(data.head())
+
+#graph code goes here
+count_classes = pd.value_counts(data['Class'], sort = True)
+
+count_classes.plot(kind = 'bar', rot=0)
+
+plt.title("Transaction Class Distribution")
+
+plt.xticks(range(2), LABELS)
+
+plt.xlabel("Class")
+
+plt.ylabel("Frequency");
+
+plt.show()
+
+#fraud
+Fraud = data[data['Class']==1]
+
+Normal = data[data['Class']==0]
+
+print(Fraud.Amount.describe())
+
+#graphical
+f, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+
+f.suptitle('Amount per transaction by class')
+
+bins = 50
+
+ax1.hist(Fraud.Amount, bins = bins)
+
+ax1.set_title('Fraud')
+
+ax2.hist(Normal.Amount, bins = bins)
+
+ax2.set_title('Normal')
+
+plt.xlabel('Amount ($)')
+
+plt.ylabel('Number of Transactions')
+
+plt.xlim((0, 20000))
+
+plt.yscale('log')
+
+plt.show();
+
+#more graphical representation
+f, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+
+f.suptitle('Amount per transaction by class')
+
+bins = 50
+
+ax1.hist(Fraud.Amount, bins = bins)
+
+ax1.set_title('Fraud')
+
+ax2.hist(Normal.Amount, bins = bins)
+
+ax2.set_title('Normal')
+
+plt.xlabel('Amount ($)')
+
+plt.ylabel('Number of Transactions')
+
+plt.xlim((0, 20000))
+
+plt.yscale('log')
+
+plt.show();
+
+#bullet representation
+
+f, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+
+f.suptitle('Time of transaction vs Amount by class')
+
+ax1.scatter(Fraud.Time, Fraud.Amount)
+
+ax1.set_title('Fraud')
+
+ax2.scatter(Normal.Time, Normal.Amount)
+
+ax2.set_title('Normal')
+
+plt.xlabel('Time (in Seconds)')
+
+plt.ylabel('Amount')
+
+plt.show()
+
+
+
+#trace
+
+#init_notebook_mode(connected=True)
+#plotly.offline.init_notebook_mode(connected=True)
+
+# Create a trace
+trace = go.Scatter(
+	x = Fraud.Time,
+	y = Fraud.Amount,
+	mode = 'markers'
+)
+data = [trace]
+"""plotly.offline.iplot({
+	"data": data
+})"""
+data1.hist(figsize=(20,20))
+plt.show()
+
+
+Fraud = data1[data1['Class']==1]
+Valid = data1[data1['Class']==0]
+outlier_fraction = len(Fraud)/float(len(Valid))
+
+print(outlier_fraction)
+print("Fraud Cases : {}".format(len(Fraud)))
+print("Valid Cases : {}".format(len(Valid)))
+
+
+correlation_matrix = data1.corr()
+fig = plt.figure(figsize=(12,9))
+sns.heatmap(correlation_matrix,vmax=0.8,square = True)
+plt.show()
