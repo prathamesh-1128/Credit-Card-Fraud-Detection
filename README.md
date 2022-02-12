@@ -10,5 +10,5 @@ Local Outlier Factor (LOF)
 The anomaly score of each sample is called Local Outlier Factor. It measures the local deviation of density of a given sample with respect to its neighbors. It is local in that the anomaly score depends on how isolated the object is with respect to the surrounding neighborhood.
 
 Isolation Forest Algorithm
-The IsolationForest âisolatesâ observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of the selected feature.
+The IsolationForest algorithm observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of the selected feature.
 Since recursive partitioning can be represented by a tree structure, the number of splittings required to isolate a sample is equivalent to the path length from the root node to the terminating node.
